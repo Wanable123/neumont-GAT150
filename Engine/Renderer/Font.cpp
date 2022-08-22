@@ -1,7 +1,8 @@
-#include "Font.h"
-#include <SDL_ttf.h>
+#include "Font.h" 
+#include <SDL_ttf.h> 
 
-namespace livewire {
+namespace livewire
+{
 	Font::Font(const std::string& filename, int fontSize)
 	{
 		Load(filename, fontSize);
@@ -9,10 +10,16 @@ namespace livewire {
 
 	Font::~Font()
 	{
-		if (m_ttfFont != NULL)
+		if (m_ttfFont)
 		{
-			TTF_CloseFont(m_ttfFont);
+			TTF_CloseFont(m_ttfFont); //?????
+			m_ttfFont = nullptr;
 		}
+	}
+
+	bool Font::Create(std::string filename, ...)
+	{
+		return false;
 	}
 
 	void Font::Load(const std::string& filename, int fontSize)

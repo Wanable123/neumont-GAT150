@@ -1,4 +1,5 @@
 #include "File.h"
+#include "Logger.h"
 #include <filesystem>
 #include <fstream>
 
@@ -6,6 +7,7 @@ namespace livewire
 {
 	void SetFilePath(const std::string& pathname)
 	{
+		//right-click on engine and change to c++17
 		std::filesystem::current_path(pathname);
 	}
 
@@ -29,9 +31,14 @@ namespace livewire
 
 	bool ReadFile(const std::string& pathname, std::string& buffer)
 	{
-		if (!FileExists(pathname)) return false;
+		if (!FileExists(pathname))
+		{
+			LOG("Error could not read file %s", pathname.c_str());
 
-		//getting file size and setting buffer size
+			return false;
+		}
+
+		//get file size and set buffer size
 		size_t size;
 		GetFileSize(pathname, size);
 		buffer.resize(size);
@@ -40,8 +47,7 @@ namespace livewire
 		fstream.read(buffer.data(), size);
 		fstream.close();
 
-
-
-		return false;
+		return true;
 	}
+
 }

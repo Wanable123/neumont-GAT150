@@ -1,12 +1,13 @@
 #pragma once
 #include "Renderer.h"
-#include <string>
+#include "../Resource/Resource.h"
+#include "../Math/Transform.h"
 #include <vector>
-
+#include <string>
 
 namespace livewire
 {
-	class Model
+	class Model : public Resource
 	{
 	public:
 		Model() = default;
@@ -17,16 +18,20 @@ namespace livewire
 		}
 		Model(const std::string& filename);
 
-		void Draw(Renderer& renderer, const Vector2& position, float angle, float scale = 1);
+		bool Create(std::string filename, ...) override;
 
-		void Load(const std::string& filename);
+		void Draw(Renderer& renderer, const Vector2& position, float angle, const Vector2& scale = Vector2{ 1, 1 });
+		void Draw(Renderer& renderer, const Transform& transform);
+
+		bool Load(const std::string& filename);
 		float CalculateRadius();
 
 		float GetRadius() { return m_radius; }
 
 	private:
-		std::vector<livewire::Vector2> m_points;
 		livewire::Color m_color{ 0,0,0,0 };
+		std::vector<livewire::Vector2> m_points;
+
 		float m_radius = 0;
 	};
 }

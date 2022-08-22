@@ -17,10 +17,9 @@ namespace livewire {
 	  const uint32_t button_middle = 1;
 	  const uint32_t button_right = 2;
 
-	  void livewire::InputSystem::Initialize()
+	  void InputSystem::Initialize()
 	  {
 		  const uint8_t* keyboardState = SDL_GetKeyboardState(&m_numKeys);
-
 
 		  m_keyboardState.resize(m_numKeys);
 		  std::copy(keyboardState, keyboardState + m_numKeys, m_keyboardState.begin());
@@ -28,12 +27,13 @@ namespace livewire {
 		  m_prevKeyboardState = m_keyboardState;
 	  }
 
-	  void livewire::InputSystem::Shutdown()
+	  void InputSystem::Shutdown()
 	  {
 		  //
+
 	  }
 
-	  void livewire::InputSystem::Update()
+	  void InputSystem::Update()
 	  {
 		  SDL_Event event;
 		  SDL_PollEvent(&event);
@@ -45,19 +45,60 @@ namespace livewire {
 		  const uint8_t* keyboardState = SDL_GetKeyboardState(nullptr);
 		  std::copy(keyboardState, keyboardState + m_numKeys, m_keyboardState.begin());
 
+		  //std::cout << (bool)m_keyboardState[SDL_SCANCODE_SPACE] << std::endl;
+		  /*for (auto state : m_keyboardState)
+		  {
+			  std::cout << (bool)state << std::endl;
+		  }
+		  std::cout << std::endl;
+		  */
 
+		  //Mouse
 		  m_prevMouseButtonState = m_mouseButtonState;
 		  int x, y;
 		  uint32_t buttons = SDL_GetMouseState(&x, &y);
-
 		  m_mousePosition = livewire::Vector2{ x , y };
-		  m_mouseButtonState[0] = buttons & SDL_BUTTON_LMASK;
-		  m_mouseButtonState[1] = buttons & SDL_BUTTON_MMASK;
-		  m_mouseButtonState[2] = buttons & SDL_BUTTON_RMASK;
+		  m_mouseButtonState[0] = buttons & SDL_BUTTON_LMASK; // buttons [0001] & [0RML] 
+		  m_mouseButtonState[1] = buttons & SDL_BUTTON_MMASK; // buttons [0010] & [0RML] 
+		  m_mouseButtonState[2] = buttons & SDL_BUTTON_RMASK; // buttons [0100] & [0RML] 
+
+
 
 	  }
 
+	  InputSystem::KeyState InputSystem::GetKeyState(uint32_t key)
+	  {
+		  KeyState keyState = KeyState::Idle;
 
+		  bool keyDown = GetKeyDown(key);
+		  bool prevKeyDown = GetPreviousKeyDown(key);
+
+		  if (keyDown && prevKeyDown) keyState = KeyState::Held;
+		  if (keyDown && !prevKeyDown) keyState = KeyState::Pressed;
+		  if (!keyDown && prevKeyDown) keyState = KeyState::Released;
+		  if (!keyDown && !prevKeyDown) keyState = KeyState::Idle;
+		  // set the keyState if buttonDown (true) and prevButtonDown (true) 
+		  // fill in the remaining states 
+
+		  return keyState;
+	  }
+
+
+	  InputSystem::KeyState InputSystem::GetButtonState(uint32_t button)
+	  {
+		  KeyState buttonState = KeyState::Idle;
+
+		  bool buttonDown = GetButtonDown(button);
+		  bool prevButtonDown = GetPreviousButtonDown(button);
+
+		  if (buttonDown && prevButtonDown) buttonState = KeyState::Held;
+		  if (buttonDown && !prevButtonDown) buttonState = KeyState::Pressed;
+		  if (!buttonDown && prevButtonDown) buttonState = KeyState::Released;
+		  if (!buttonDown && !prevButtonDown) buttonState = KeyState::Idle;
+		  // set the keyState if buttonDown (true) and prevButtonDown (true) 
+		  // fill in the remaining states 
+
+		  return buttonState;
+	  }
 
 }
-

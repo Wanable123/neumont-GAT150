@@ -14,15 +14,5 @@ namespace math
     }
 
 
-    inline float DegToRad(float degrees) {
-        return degrees * (Pi / 180);
 
-
-    }
-
-    inline float RadToDeg(float radians) {
-        return radians * (180 / Pi);
-
-
-    }
 }

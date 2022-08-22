@@ -3,50 +3,51 @@
 #include <sstream>
 #include <string>
 
-
 namespace livewire
 {
 	struct Vector2
 	{
 		float x, y;
 
-		Vector2() : x{ 0 }, y{ 0 }{}
+		Vector2() : x{ 0 }, y{ 0 } {}
 		Vector2(float x, float y) : x{ x }, y{ y } {}
 		Vector2(float v) : x{ v }, y{ v } {}
 		Vector2(int x, int y) : x{ (float)x }, y{ (float)y } {}
 
 		void Set(float x, float y) { this->x = x; this->y = y; }
+		float operator [] (size_t index) const { return (&x)[index]; } //(index == 0) ? x : y; }
+		float& operator [] (size_t index) { return (&x)[index]; } //(index == 0) ? x : y; }
 
 		//arithmetic operators
+		//Vector 2 = Vector2 + Vector2
+		Vector2 operator + (const Vector2& v) const { return Vector2{ this->x + v.x, this->y + v.y }; }
+		Vector2 operator - (const Vector2& v) const { return Vector2{ this->x - v.x, this->y - v.y }; }
+		Vector2 operator * (const Vector2& v) const { return Vector2{ this->x * v.x, this->y * v.y }; }
+		Vector2 operator / (const Vector2& v) const { return Vector2{ this->x / v.x, this->y / v.y }; }
 
-		Vector2 operator + (const Vector2& v) const { return Vector2{ x + v.x, y + v.y }; }
-		Vector2 operator - (const Vector2& v) const { return Vector2{ x - v.x, y - v.y }; }
-		Vector2 operator * (const Vector2& v) const { return Vector2{ x * v.x, y * v.y }; }
-		Vector2 operator / (const Vector2& v) const { return Vector2{ x / v.x, y / v.y }; }
-
-
-		Vector2 operator + (float s) const { return Vector2{ this->x + s, y + s }; }
-		Vector2 operator - (float s) const { return Vector2{ this->x - s, y - s }; }
-		Vector2 operator * (float s) const { return Vector2{ this->x * s, y * s }; }
-		Vector2 operator / (float s) const { return Vector2{ this->x / s, y / s }; }
-
+		//Vector 2 = Vector2 + float
+		Vector2 operator + (float s) const { return Vector2{ this->x + s, this->y + s }; }
+		Vector2 operator - (float s)  const { return Vector2{ this->x - s, this->y - s }; }
+		Vector2 operator * (float s) const { return Vector2{ this->x * s, this->y * s }; }
+		Vector2 operator / (float s) const { return Vector2{ this->x / s, this->y / s }; }
 
 		//assignment operators
-		Vector2& operator += (const Vector2& v) { this->x += v.x; y += v.y; return *this; }
-		Vector2& operator -= (const Vector2& v) { this->x -= v.x; y -= v.y; return *this; }
-		Vector2& operator *= (const Vector2& v) { this->x *= v.x; y *= v.y; return *this; }
-		Vector2& operator /= (const Vector2& v) { this->x /= v.x; y /= v.y; return *this; }
+		Vector2& operator += (const Vector2& v) { this->x += v.x; this->y += v.y; return *this; }
+		Vector2& operator -= (const Vector2& v) { this->x -= v.x; this->y -= v.y; return *this; }
+		Vector2& operator *= (const Vector2& v) { this->x *= v.x; this->y *= v.y; return *this; }
+		Vector2& operator /= (const Vector2& v) { this->x /= v.x; this->y /= v.y; return *this; }
 
-
-		Vector2& operator += (float s) { this->x += s; y += s; return *this; }
-		Vector2& operator -= (float s) { this->x -= s; y -= s; return *this; }
-		Vector2& operator *= (float s) { this->x *= s; y *= s; return *this; }
-		Vector2& operator /= (float s) { this->x /= s; y /= s; return *this; }
+		Vector2& operator += (float s) { this->x += s; this->y += s; return *this; }
+		Vector2& operator -= (float s) { this->x -= s; this->y -= s; return *this; }
+		Vector2& operator *= (float s) { this->x *= s; this->y *= s; return *this; }
+		Vector2& operator /= (float s) { this->x /= s; this->y /= s; return *this; }
 
 		//unary
-		Vector2 operator - () const { return Vector2{ -x, -y }; }
+		//vector2 = -Vector2
+		Vector2 operator - () { return Vector2{ -x, -y }; }
 
 		//comparison
+		//Vector2 == Vector2
 		bool operator == (const Vector2& v) const { return (this->x == v.x && this->y == v.y); }
 		bool operator != (const Vector2& v) const { return (this->x != v.x || this->y != v.y); }
 
@@ -63,23 +64,20 @@ namespace livewire
 		float GetAngle();
 		static Vector2 Rotate(const Vector2& v, float angle);
 
+		static const Vector2 one;
+		static const Vector2 zero;
+		static const Vector2 up;
+		static const Vector2 down;
+		static const Vector2 left;
+		static const Vector2 right;
 
+		/*Vector2 Add(const Vector2& v) { return Vector2{v.x + x, v.y + y}; }*/
 	};
 
-	inline std::istream& operator >> (std::istream& stream, Vector2& v)
-	{
-		std::string line;
-		std::getline(stream, line);
+	std::istream& operator >> (std::istream& stream, Vector2& v);
+	std::ostream& operator << (std::ostream& stream, const Vector2& v);
 
-		std::string xs = line.substr(line.find("{") + 1, line.find(",") - line.find("{") + 1);
-		v.x = std::stof(xs);
-
-		std::string ys = line.substr(line.find(",") + 1, line.find("}") - line.find(",") + 1);
-		v.y = std::stof(ys);
-
-		return stream;
-	}
-
+	//declarations
 	inline float Vector2::LengthSqr()
 	{
 		return x * x + y * y;
@@ -104,7 +102,7 @@ namespace livewire
 	{
 		float length = Length();
 
-		return Vector2{ x / length, y / length };
+		return (length == 0) ? Vector2{ 0, 0 } : Vector2{ x / length, y / length };
 	}
 
 	inline void Vector2::Normalize()
@@ -122,7 +120,7 @@ namespace livewire
 		float x = v.x * std::cos(angle) - v.y * std::sin(angle);
 		float y = v.x * std::sin(angle) + v.y * std::cos(angle);
 
-		return Vector2{ x,y };
+		return Vector2{ x, y };
 	}
 
 }

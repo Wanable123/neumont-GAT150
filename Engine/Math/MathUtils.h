@@ -1,7 +1,5 @@
-//#pragma once thing below is same as pragma
-
-
-
+#pragma once 
+//thing below is same as pragma
 
 namespace math
 {
@@ -10,5 +8,17 @@ namespace math
 	const float HalfPi = 1.57079632679f;
 	int sqr(int v);
 	int half(int v);
+
+	constexpr float DegToRad(float degrees) {
+		return degrees * (Pi / 180);
+
+
+	}
+
+	constexpr float RadToDeg(float radians) {
+		return radians * (180 / Pi);
+
+
+	}
 }
 
