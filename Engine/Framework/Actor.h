@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
-#include "../Math/Transform.h"
-#include "Component.h"
+#include "Math/Transform.h"
+#include "Framework/Component.h"
 #include <vector>
 #include <memory>
 
@@ -13,9 +13,13 @@ namespace livewire
 	{
 	public:
 		Actor() = default;
+		Actor(const Actor& other);
 		Actor(const Transform& transform) : m_transform{ transform } {}
-		//Actor(Model model, Transform transform) : GameObject{ transform }, m_model{ model } {}
 
+		CLASS_DECLARATION(Actor)
+
+			// Inherited via GameObject
+			virtual void Initialize() override;
 		virtual void Update() override;
 		virtual void Draw(Renderer& renderer);
 
@@ -33,29 +37,31 @@ namespace livewire
 		float GetRadius() { return 0; }// m_model.GetRadius()* std::max(m_transform.scale.x, m_transform.scale.y); }
 
 		const std::string& GetTag() { return tag; }
-		void SetTag(const std::string& name) { this->name = name; }
-		const std::string& GetName() { return tag; }
+		void SetTag(const std::string& tag) { this->tag = tag; }
+		const std::string& GetName() { return name; }
 		void SetName(const std::string& name) { this->name = name; }
 
 		friend class Scene;
 		friend class Component;
 		Transform m_transform;
+		void SetDestroy() { m_destroy = true; }
+		void SetActive(bool active = true) { active = active; }
+		bool isActive() { return active; }
+
+		Scene* GetScene() { return m_scene; }
 
 	protected:
 		std::string name;
 		std::string tag;
 
-
 		bool m_destroy = false;
-		//physics
-		Vector2 m_velocity;
-		float m_damping = 1;
-
+		bool active = true;
 		Scene* m_scene = nullptr; //can make gets and sets
 		Actor* m_parent = nullptr;
 
 		std::vector<std::unique_ptr<Component>> m_components;
 		std::vector<std::unique_ptr<Actor>> m_children;
+
 	};
 
 	template<typename T>

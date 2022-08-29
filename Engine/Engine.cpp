@@ -7,6 +7,7 @@ namespace livewire
 	Time g_time;
 	AudioSystem g_audioSystem;
 	ResourceManager g_resourceManager;
+	PhysicsSystem g_physicsSystem;
 
 
 	void Engine::Register()
@@ -18,5 +19,10 @@ namespace livewire
 		REGISTER_CLASS(PlayerComponent);
 		REGISTER_CLASS(SpriteComponent);
 		REGISTER_CLASS(SpriteAnimComponent);
+		REGISTER_CLASS(CollisionComponent);
+		REGISTER_CLASS(TextComponent);
+		REGISTER_CLASS(RBPhysicsComponent);
+
+		
 	}
 }

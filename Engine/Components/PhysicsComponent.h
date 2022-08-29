@@ -1,6 +1,6 @@
 #pragma once
-#include "../Framework/Component.h"
-#include "../Math/Vector2.h"
+#include "Framework/Component.h"
+#include "Math/Vector2.h"
 
 namespace livewire
 {
@@ -9,10 +9,11 @@ namespace livewire
 	public:
 		PhysicsComponent() = default;
 
-		void Update() override;
-		void ApplyForce(const Vector2& force) { acceleration += force; }
+		CLASS_DECLARATION(PhysicsComponent)
 
-		// Inherited via Component
+		void Update() override;
+		virtual void ApplyForce(const Vector2& force) { acceleration += force; }
+
 		virtual bool Write(const rapidjson::Value& value) const override;
 		virtual bool Read(const rapidjson::Value& value) override;
 

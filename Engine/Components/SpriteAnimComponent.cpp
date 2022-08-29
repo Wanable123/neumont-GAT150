@@ -17,8 +17,6 @@ namespace livewire
                 frame = start_frame;
             }
         }
-
-        //calculate source rect
         Vector2 cellSize = m_texture->GetSize() / Vector2{ num_columns, num_rows };
 
         int column = (frame - 1) % num_columns;

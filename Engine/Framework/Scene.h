@@ -12,20 +12,25 @@ namespace livewire
 	class Renderer;
 	class Game;
 
-	class Scene : public ISerializable
+	class Scene : public GameObject, public ISerializable
 	{
 	public:
 		Scene() = default;
 		Scene(Game* game) : m_game{ game } {}
+		Scene(const Scene& other) {}
 		~Scene() = default;
 
-		void Update();
+		CLASS_DECLARATION(Scene)
+
+		void Initialize() override;
+		void Update() override;
 		void Draw(Renderer& renderer);
 
 		virtual bool Write(const rapidjson::Value& value) const override;
 		virtual bool Read(const rapidjson::Value& value) override;
 
 		void Add(std::unique_ptr<Actor> actor);
+		void RemoveAll();
 
 		template<typename T>
 		T* GetActor();

@@ -1,9 +1,10 @@
 #pragma once 
-#include "../Math\Vector2.h" 
-#include "../Resource/Resource.h"
+#include "Math\Vector2.h" 
+#include "Resource/Resource.h"
 #include <string> 
 
 struct SDL_Texture;
+struct SDL_Surface;
 namespace livewire
 {
 	class Renderer;
@@ -16,6 +17,7 @@ namespace livewire
 		bool Create(std::string filename, ...) override;
 
 		bool Create(Renderer& renderer, const std::string& filename);
+		bool CreateFromSurface(SDL_Surface* surface, Renderer& renderer);
 
 		Vector2 GetSize() const;
 

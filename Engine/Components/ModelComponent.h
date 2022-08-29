@@ -10,6 +10,7 @@ namespace livewire
 	public:
 		ModelComponent() = default;
 
+		CLASS_DECLARATION(ModelComponent)
 	public:
 
 		virtual void Update() override;

@@ -5,6 +5,7 @@
 #include "Core/Memory.h"
 #include "Core/File.h"
 #include "Core/Time.h"
+#include "Core/Logger.h"
 
 #include "Math/MathUtils.h"
 #include "Math/Random.h"
@@ -20,6 +21,10 @@
 #include "Components/PhysicsComponent.h"
 #include "Components/ModelComponent.h"
 #include "Components/SpriteAnimComponent.h"
+#include "Components/TextComponent.h"
+#include "Components/TilemapComponent.h"
+#include "Components/CollisionComponent.h"
+#include "Components/RBPhysicsComponents.h"
 
 #include "Input/InputSystem.h"
 #include "Audio/AudioSystem.h"
@@ -31,6 +36,7 @@
 #include "Renderer/Texture.h"
 #include "Renderer/Model.h"
 
+#include "Physics/PhysicsSystem.h"
 #include <memory>
 
 
@@ -41,6 +47,8 @@ namespace livewire
 	extern Time g_time;
 	extern AudioSystem g_audioSystem;
 	extern ResourceManager g_resourceManager;
+	extern PhysicsSystem g_physicsSystem;
+	
 
 	class Engine : public Singleton<Engine>
 	{
